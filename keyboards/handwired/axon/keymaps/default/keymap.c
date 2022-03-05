@@ -27,10 +27,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	),
 
 	LAYOUT_default(//Layer 1
-		KC_GRV,  KC_1,    KC_2,    KC_3,  KC_4,     KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,     KC_DEL,
-		KC_TAB,  KC_NO,   KC_NO,   KC_NO, KC_NO,    KC_HOME, KC_MINS, KC_EQL,  KC_SCLN, KC_QUOT, KC_ENTER,
-		KC_LSFT, KC_NO,   KC_NO,   KC_NO, KC_NO,    KC_END,  KC_LBRC, KC_RBRC, KC_SLSH, KC_BSLS, KC_TRNS,
-		         KC_LALT, KC_LCTL,        KC_SPACE,          KC_TRNS,          KC_RGUI, TO(3)
+		KC_GRV,  KC_1,    KC_2,    KC_3,     KC_4,     KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,     KC_DEL,
+		KC_TAB,  KC_NO,   KC_UP,   KC_NO,    KC_NO,    KC_HOME, KC_MINS, KC_EQL,  KC_SCLN, KC_QUOT, KC_ENTER,
+		KC_LSFT, KC_LEFT, KC_DOWN, KC_RIGHT, KC_NO,    KC_END,  KC_LBRC, KC_RBRC, KC_SLSH, KC_BSLS, KC_TRNS,
+		         KC_LALT, KC_LCTL,           KC_SPACE,          KC_TRNS,          KC_RGUI, TO(3)
 	),
 
 	LAYOUT_default(//Layer 2
@@ -48,10 +48,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	),
 
 	LAYOUT_default(//Layer 4
-		KC_GRV,  KC_1,    KC_2,    KC_3,  KC_4,     KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,     KC_DEL,
-		KC_TAB,  KC_NO,   KC_NO,   KC_NO, KC_NO,    KC_HOME, KC_MINS, KC_EQL,  KC_SCLN, KC_QUOT, KC_ENTER,
-		KC_LSFT, KC_NO,   KC_NO,   KC_NO, KC_NO,    KC_END,  KC_LBRC, KC_RBRC, KC_SLSH, KC_BSLS, KC_TRNS,
-		         KC_LALT, KC_LCTL,        KC_SPACE,          KC_TRNS,          KC_RGUI, TO(0)
+		KC_GRV,  KC_1,    KC_2,    KC_3,     KC_4,     KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,     KC_DEL,
+		KC_TAB,  KC_NO,   KC_UP,   KC_NO,    KC_NO,    KC_HOME, KC_MINS, KC_EQL,  KC_SCLN, KC_QUOT, KC_ENTER,
+		KC_LSFT, KC_LEFT, KC_DOWN, KC_RIGHT, KC_NO,    KC_END,  KC_LBRC, KC_RBRC, KC_SLSH, KC_BSLS, KC_TRNS,
+		         KC_LALT, KC_LCTL,           KC_SPACE,          KC_TRNS,          KC_RGUI, TO(0)
 	),
 
 	LAYOUT_default(//Layer 5
