@@ -376,11 +376,9 @@ bool oled_task_user(void) {
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  if (record->event.pressed) {
-    set_keylog(keycode, record);
-  }
-  return true;
-
+    if (record->event.pressed) {
+        set_keylog(keycode, record);
+    }
     // Enable persistent switching between default keymaps
     switch (keycode) {
         case TG_QWERTY:
@@ -395,6 +393,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
         return false;
         break;
-  }
+    }
+
+    return true;
 }
 #endif // OLED_ENABLE
