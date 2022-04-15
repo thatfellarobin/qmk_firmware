@@ -198,17 +198,17 @@ static void render_luna(int LUNA_X, int LUNA_Y) {
         /* current status */
         if (led_usb_state.caps_lock) {
             oled_write_raw_P(bark[abs(1 - current_frame)], ANIM_SIZE);
-
-        } else if (current_wpm <= MIN_SNEAK_SPEED) {
+        }
+        else if (current_wpm <= MIN_SNEAK_SPEED) {
             oled_write_raw_P(sit[abs(1 - current_frame)], ANIM_SIZE);
-
-        } else if (current_wpm <= MIN_WALK_SPEED) {
+        }
+        else if (current_wpm <= MIN_WALK_SPEED) {
             oled_write_raw_P(sneak[abs(1 - current_frame)], ANIM_SIZE);
-
-        } else if (current_wpm <= MIN_RUN_SPEED) {
+        }
+        else if (current_wpm <= MIN_RUN_SPEED) {
             oled_write_raw_P(walk[abs(1 - current_frame)], ANIM_SIZE);
-
-        } else {
+        }
+        else {
             oled_write_raw_P(run[abs(1 - current_frame)], ANIM_SIZE);
         }
     }
