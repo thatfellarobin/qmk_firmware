@@ -43,25 +43,25 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   ),
 
-  [_LOWER] = LAYOUT_split_3x6_3(// Numbers, navigation, symbols.
+  [_LOWER] = LAYOUT_split_3x6_3(// Numbers, symbols.
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
       XXXXXXX,    KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                         KC_6,    KC_7,    KC_8,    KC_9,    KC_0,  KC_DEL,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      XXXXXXX, XXXXXXX, XXXXXXX, KC_PGUP, KC_HOME, XXXXXXX,                       KC_GRV, KC_MINS,  KC_EQL, KC_LBRC, KC_RBRC, XXXXXXX,
+      XXXXXXX, KC_EXLM,   KC_AT, KC_HASH,  KC_DLR, KC_PERC,                      KC_TILD, KC_UNDS, KC_PLUS, KC_LCBR, KC_RCBR, XXXXXXX,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      KC_LGUI, XXXXXXX, XXXXXXX, KC_PGDN,  KC_END, XXXXXXX,                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+      XXXXXXX, KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN,                       KC_GRV, KC_MINS,  KC_EQL, KC_LBRC, KC_RBRC, XXXXXXX,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
                                           KC_LCTL, KC_LSFT, _______,    _______, KC_RSFT, KC_RALT
                                       //`--------------------------'  `--------------------------'
   ),
 
-  [_RAISE] = LAYOUT_split_3x6_3(// F keys, arrow keys, and media
+  [_RAISE] = LAYOUT_split_3x6_3(// F keys, arrow keys, navigation, and media
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
       TG_QWERTY, KC_F12,  KC_F7,   KC_F8,   KC_F9, XXXXXXX,                      KC_MPRV, KC_VOLD,   KC_UP, KC_VOLU, KC_MNXT,  KC_DEL,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      TG_COLEMAK, KC_F11, KC_F4,   KC_F5,   KC_F6, XXXXXXX,                      KC_MPLY, KC_LEFT, KC_DOWN, KC_RGHT, XXXXXXX, XXXXXXX,
+      TG_COLEMAK, KC_F11, KC_F4,   KC_F5,   KC_F6, XXXXXXX,                      KC_MPLY, KC_LEFT, KC_DOWN, KC_RGHT, KC_HOME, KC_PGUP,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      XXXXXXX,  KC_F10,   KC_F1,   KC_F2,   KC_F3, XXXXXXX,                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+      XXXXXXX,  KC_F10,   KC_F1,   KC_F2,   KC_F3, XXXXXXX,                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,  KC_END, KC_PGDN,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
                                           KC_LCTL, KC_LSFT, _______,    _______, KC_RSFT, KC_RALT
                                       //`--------------------------'  `--------------------------'
@@ -296,8 +296,9 @@ const char code_to_name[60] = {
 
 void set_keylog(uint16_t keycode, keyrecord_t *record) {
     char name = ' ';
-    if ((keycode >= QK_MOD_TAP && keycode <= QK_MOD_TAP_MAX) ||
-        (keycode >= QK_LAYER_TAP && keycode <= QK_LAYER_TAP_MAX)) { keycode = keycode & 0xFF; }
+    if ((keycode >= QK_MOD_TAP && keycode <= QK_MOD_TAP_MAX) || (keycode >= QK_LAYER_TAP && keycode <= QK_LAYER_TAP_MAX)) {
+        keycode = keycode & 0xFF;
+    }
     if (keycode < 60) {
         name = code_to_name[keycode];
     }
@@ -393,7 +394,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
             return false;
             break;
-        case KC_SPC:
+        case KC_SPC: // For doggo
             if (record->event.pressed) {
                 isJumping  = true;
                 showedJump = false;
