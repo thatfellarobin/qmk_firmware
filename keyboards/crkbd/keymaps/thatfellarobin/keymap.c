@@ -38,7 +38,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       KC_LGUI,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                         KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH, KC_BSLS,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                    KC_LCTL, KC_LSFT, LT(_LOWER, KC_SPC),   LT(_RAISE, KC_ENT), KC_RSFT, KC_RALT
+                               KC_LCTL, KC_LSFT, LT(_LOWER, KC_SPC),  LT(_RAISE, KC_ENT), KC_RSFT, KC_RALT
                                       //`--------------------------'  `--------------------------'
 
   ),
@@ -47,7 +47,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
       XXXXXXX,    KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                         KC_6,    KC_7,    KC_8,    KC_9,    KC_0,  KC_DEL,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      XXXXXXX, KC_EXLM,   KC_AT, KC_HASH,  KC_DLR, KC_PERC,                      KC_TILD, KC_UNDS, KC_PLUS, KC_LCBR, KC_RCBR, XXXXXXX,
+      KC_CAPS, KC_EXLM,   KC_AT, KC_HASH,  KC_DLR, KC_PERC,                      KC_TILD, KC_UNDS, KC_PLUS, KC_LCBR, KC_RCBR, XXXXXXX,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       XXXXXXX, KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN,                       KC_GRV, KC_MINS,  KC_EQL, KC_LBRC, KC_RBRC, XXXXXXX,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
@@ -75,7 +75,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       KC_LGUI,    KC_Z,    KC_X,    KC_C,    KC_D,    KC_V,                         KC_K,    KC_H, KC_COMM,  KC_DOT, KC_SLSH, KC_BSLS,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                    KC_LCTL, KC_LSFT, LT(_LOWER, KC_SPC),   LT(_RAISE, KC_ENT), KC_RSFT, KC_RALT
+                               KC_LCTL, KC_LSFT, LT(_LOWER, KC_SPC),  LT(_RAISE, KC_ENT), KC_RSFT, KC_RALT
                                       //`--------------------------'  `--------------------------'
   )
 };
@@ -94,7 +94,6 @@ oled_rotation_t oled_init_user(oled_rotation_t rotation) {
 char wpm_str[10];
 char keylog_str[10] = {};
 
-/* KEYBOARD PET START */
 /* settings */
 #    define MIN_SNEAK_SPEED     10
 #    define MIN_WALK_SPEED      40
@@ -106,7 +105,7 @@ char keylog_str[10] = {};
 
 /* timers */
 uint32_t anim_timer = 0;
-uint32_t anim_sleep = 0;
+uint32_t oled_timer = 0;
 
 /* current frame */
 uint8_t current_frame = 0;
@@ -218,16 +217,7 @@ static void render_luna(int LUNA_X, int LUNA_Y) {
         anim_timer = timer_read32();
         animate_luna();
     }
-
-    /* this fixes the screen on and off bug */
-    if (current_wpm > 0) {
-        oled_on();
-        anim_sleep = timer_read32();
-    } else if (timer_elapsed32(anim_sleep) > OLED_TIMEOUT) {
-        oled_off();
-    }
 }
-/* KEYBOARD PET END */
 
 static void print_status_narrow_slave(void) {
     // Print current layer
@@ -253,10 +243,8 @@ static void print_status_narrow_slave(void) {
     if (led_usb_state.caps_lock) {
         oled_write_ln_P(PSTR("CAPS "), true);
     } else {
-        oled_write_ln_P(PSTR("     "), false);
+        oled_write_ln_P(PSTR("caps "), false);
     }
-    // uint8_t led_usb_state = host_keyboard_leds();
-    // oled_write_ln_P(led_usb_state & (1 << USB_LED_CAPS_LOCK) ? PSTR("CPSLK") : PSTR("     "), false);
 }
 
 
@@ -270,21 +258,6 @@ static void print_status_narrow_master(void) {
     sprintf(wpm_str, "wpm:\n%03d", current_wpm);
     oled_write(wpm_str, false);
 }
-
-// void oled_render_layer_state(void) {
-//     oled_write_P(PSTR("Layer: "), false);
-//     switch (layer_state) {
-//         case _QWERTY:
-//             oled_write_ln_P(PSTR("Default"), false);
-//             break;
-//         case _LOWER:
-//             oled_write_ln_P(PSTR("Lower"), false);
-//             break;
-//         case _RAISE:
-//             oled_write_ln_P(PSTR("Raise"), false);
-//             break;
-//     }
-// }
 
 const char code_to_name[60] = {
     ' ', ' ', ' ', ' ', 'a', 'b', 'c', 'd', 'e', 'f',
@@ -307,25 +280,6 @@ void set_keylog(uint16_t keycode, keyrecord_t *record) {
     snprintf(keylog_str, sizeof(keylog_str), ">> %c",
         name);
 }
-
-void oled_render_keylog(void) {
-    oled_write(keylog_str, false);
-}
-
-// void render_bootmagic_status(bool status) {
-//     /* Show Ctrl-Gui Swap options */
-//     static const char PROGMEM logo[][2][3] = {
-//         {{0x97, 0x98, 0}, {0xb7, 0xb8, 0}},
-//         {{0x95, 0x96, 0}, {0xb5, 0xb6, 0}},
-//     };
-//     if (status) {
-//         oled_write_ln_P(logo[0][0], false);
-//         oled_write_ln_P(logo[0][1], false);
-//     } else {
-//         oled_write_ln_P(logo[1][0], false);
-//         oled_write_ln_P(logo[1][1], false);
-//     }
-// }
 
 void oled_render_logo(void) {
 
@@ -359,16 +313,19 @@ void oled_render_logo(void) {
 }
 
 bool oled_task_user(void) {
-    /* KEYBOARD PET VARIABLES START */
     current_wpm   = get_current_wpm();
     led_usb_state = host_keyboard_led_state();
-    /* KEYBOARD PET VARIABLES END */
 
     if (is_keyboard_master()) {
+        if (timer_elapsed32(oled_timer) > 60000) { // 60 seconds?
+            oled_off(); // Turn of OLED
+            return false; // prevent further rendering
+        } else {
+            oled_on();
+        }
+
         print_status_narrow_master();
         render_luna(0, 13); // doggo
-        // oled_render_layer_state();
-        // oled_render_keylog();
     } else {
         print_status_narrow_slave();
         oled_render_logo();
@@ -379,6 +336,7 @@ bool oled_task_user(void) {
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (record->event.pressed) {
         set_keylog(keycode, record);
+        oled_timer = timer_read32(); // Restart timeout timer on each button press
     }
     // Enable persistent switching between default keymaps
     switch (keycode) {
