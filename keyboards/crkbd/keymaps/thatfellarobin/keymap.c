@@ -24,9 +24,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 enum crkbd_layers {
     _QWERTY,
+    _COLEMAK,
     _LOWER,
-    _RAISE,
-    _COLEMAK
+    _RAISE
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -41,6 +41,18 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                KC_LCTL, KC_LSFT, LT(_LOWER, KC_SPC),  LT(_RAISE, KC_ENT), KC_RSFT, KC_RALT
                                       //`--------------------------'  `--------------------------'
 
+  ),
+
+  [_COLEMAK] = LAYOUT_split_3x6_3(
+  //,-----------------------------------------------------.                    ,-----------------------------------------------------.
+       KC_ESC,    KC_Q,    KC_W,    KC_F,    KC_P,    KC_B,                         KC_J,    KC_L,    KC_U,    KC_Y, KC_SCLN, KC_BSPC,
+  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
+       KC_TAB,    KC_A,    KC_R,    KC_S,    KC_T,    KC_G,                         KC_M,    KC_N,    KC_E,    KC_I,    KC_O, KC_QUOT,
+  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
+      KC_LGUI,    KC_Z,    KC_X,    KC_C,    KC_D,    KC_V,                         KC_K,    KC_H, KC_COMM,  KC_DOT, KC_SLSH, KC_BSLS,
+  //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
+                               KC_LCTL, KC_LSFT, LT(_LOWER, KC_SPC),  LT(_RAISE, KC_ENT), KC_RSFT, KC_RALT
+                                      //`--------------------------'  `--------------------------'
   ),
 
   [_LOWER] = LAYOUT_split_3x6_3(// Numbers, symbols.
@@ -64,18 +76,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       XXXXXXX,  KC_F10,   KC_F1,   KC_F2,   KC_F3, XXXXXXX,                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,  KC_END, KC_PGDN,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
                                           KC_LCTL, KC_LSFT, _______,    _______, KC_RSFT, KC_RALT
-                                      //`--------------------------'  `--------------------------'
-  ),
-
-  [_COLEMAK] = LAYOUT_split_3x6_3(
-  //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-       KC_ESC,    KC_Q,    KC_W,    KC_F,    KC_P,    KC_B,                         KC_J,    KC_L,    KC_U,    KC_Y, KC_SCLN, KC_BSPC,
-  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-       KC_TAB,    KC_A,    KC_R,    KC_S,    KC_T,    KC_G,                         KC_M,    KC_N,    KC_E,    KC_I,    KC_O, KC_QUOT,
-  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      KC_LGUI,    KC_Z,    KC_X,    KC_C,    KC_D,    KC_V,                         KC_K,    KC_H, KC_COMM,  KC_DOT, KC_SLSH, KC_BSLS,
-  //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                               KC_LCTL, KC_LSFT, LT(_LOWER, KC_SPC),  LT(_RAISE, KC_ENT), KC_RSFT, KC_RALT
                                       //`--------------------------'  `--------------------------'
   )
 };
@@ -221,12 +221,12 @@ static void render_luna(int LUNA_X, int LUNA_Y) {
 
 static void print_status_narrow_slave(void) {
     // Print current layer
-    oled_write_P(PSTR("\n\n"), false);
+    //oled_write_P(PSTR("\n\n"), false);
     oled_write_ln_P(PSTR("LAYER"), false);
-    oled_write_ln_P(PSTR(""), false);
+    //oled_write_ln_P(PSTR(""), false);
     switch (layer_state) {
         case _QWERTY:
-            oled_write_ln_P(PSTR("qwerty"), true);
+            oled_write_ln_P(PSTR("qwrty"), true);
             break;
         case _LOWER:
             oled_write_ln_P(PSTR(">num"), true);
@@ -235,11 +235,11 @@ static void print_status_narrow_slave(void) {
             oled_write_ln_P(PSTR(">func"), true);
             break;
         case _COLEMAK:
-            oled_write_ln_P(PSTR("colemk"), true);
+            oled_write_ln_P(PSTR("clmk"), true);
             break;
     }
 
-    oled_write_P(PSTR("\n\n"), false);
+    oled_write_P(PSTR("\n"), false);
     if (led_usb_state.caps_lock) {
         oled_write_ln_P(PSTR("CAPS "), true);
     } else {
@@ -252,7 +252,7 @@ static void print_status_narrow_master(void) {
     // Display keylog
     oled_write_ln_P(PSTR("this\njust\nin..."), false);
     oled_write(keylog_str, false);
-    oled_write_P(PSTR("\n\n"), false);
+    oled_write_P(PSTR("\n"), false);
 
     // Display wpm
     sprintf(wpm_str, "wpm:\n%03d", current_wpm);
