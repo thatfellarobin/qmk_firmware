@@ -36,9 +36,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
        KC_TAB,    KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                         KC_H,    KC_J,    KC_K,    KC_L, KC_SCLN, KC_QUOT,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      KC_LGUI,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                         KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH, KC_BSLS,
+      KC_LSFT,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                         KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH, KC_BSLS,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                               KC_LCTL, KC_LSFT, LT(_LOWER, KC_SPC),  LT(_RAISE, KC_ENT), KC_RSFT, KC_RALT
+                               KC_LALT, KC_LCTL, LT(_RAISE, KC_SPC),  LT(_LOWER, KC_ENT), KC_RGUI, KC_RSFT
                                       //`--------------------------'  `--------------------------'
 
   ),
@@ -49,9 +49,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
        KC_TAB,    KC_A,    KC_R,    KC_S,    KC_T,    KC_G,                         KC_M,    KC_N,    KC_E,    KC_I,    KC_O, KC_QUOT,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      KC_LGUI,    KC_Z,    KC_X,    KC_C,    KC_D,    KC_V,                         KC_K,    KC_H, KC_COMM,  KC_DOT, KC_SLSH, KC_BSLS,
+      KC_LSFT,    KC_Z,    KC_X,    KC_C,    KC_D,    KC_V,                         KC_K,    KC_H, KC_COMM,  KC_DOT, KC_SLSH, KC_BSLS,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                               KC_LCTL, KC_LSFT, LT(_LOWER, KC_SPC),  LT(_RAISE, KC_ENT), KC_RSFT, KC_RALT
+                               KC_LALT, KC_LCTL, LT(_RAISE, KC_SPC),  LT(_LOWER, KC_ENT), KC_RGUI, KC_RSFT
                                       //`--------------------------'  `--------------------------'
   ),
 
@@ -63,7 +63,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       XXXXXXX, KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN,                       KC_GRV, KC_MINS,  KC_EQL, KC_LBRC, KC_RBRC, XXXXXXX,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          KC_LCTL, KC_LSFT, _______,    _______, KC_RSFT, KC_RALT
+                                          KC_LALT, KC_LCTL, _______,    _______, KC_RGUI, KC_RSFT
                                       //`--------------------------'  `--------------------------'
   ),
 
@@ -75,7 +75,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       XXXXXXX,  KC_F10,   KC_F1,   KC_F2,   KC_F3, XXXXXXX,                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,  KC_END, KC_PGDN,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          KC_LCTL, KC_LSFT, _______,    _______, KC_RSFT, KC_RALT
+                                          KC_LALT, KC_LCTL, _______,    _______, KC_RGUI, KC_RSFT
                                       //`--------------------------'  `--------------------------'
   )
 };
@@ -219,33 +219,47 @@ static void render_luna(int LUNA_X, int LUNA_Y) {
     }
 }
 
-static void print_status_narrow_slave(void) {
-    // Print current layer
-    //oled_write_P(PSTR("\n\n"), false);
-    oled_write_ln_P(PSTR("LAYER"), false);
-    //oled_write_ln_P(PSTR(""), false);
-    switch (layer_state) {
-        case _QWERTY:
-            oled_write_ln_P(PSTR("qwrty"), true);
-            break;
-        case _LOWER:
-            oled_write_ln_P(PSTR(">num"), true);
-            break;
-        case _RAISE:
-            oled_write_ln_P(PSTR(">func"), true);
-            break;
-        case _COLEMAK:
-            oled_write_ln_P(PSTR("clmk"), true);
-            break;
-    }
+// static void print_status_narrow_slave(void) {
+//     // Print current layer
+//     //oled_write_P(PSTR("\n\n"), false);
+//     oled_write_ln_P(PSTR("LAYER"), false);
+//     //oled_write_ln_P(PSTR(""), false);
 
-    oled_write_P(PSTR("\n"), false);
-    if (led_usb_state.caps_lock) {
-        oled_write_ln_P(PSTR("CAPS "), true);
-    } else {
-        oled_write_ln_P(PSTR("caps "), false);
-    }
-}
+//     // if (layer_state_is(_QWERTY)) {
+//     //     oled_write_ln_P(PSTR("qwrty"), false);
+//     // }
+//     // else if (layer_state_is(_COLEMAK)) {
+//     //     oled_write_ln_P(PSTR("clmk"), false);
+//     // }
+//     // else if (layer_state_is(_LOWER)) {
+//     //     oled_write_ln_P(PSTR(">num"), false);
+//     // }
+//     // else if (layer_state_is(_RAISE)) {
+//     //     oled_write_ln_P(PSTR(">func"), false);
+//     // }
+
+//     switch (get_highest_layer(layer_state)) {
+//         case _QWERTY:
+//             oled_write_ln_P(PSTR("qwrty"), true);
+//             break;
+//         case _LOWER:
+//             oled_write_ln_P(PSTR(">num"), true);
+//             break;
+//         case _RAISE:
+//             oled_write_ln_P(PSTR(">func"), true);
+//             break;
+//         case _COLEMAK:
+//             oled_write_ln_P(PSTR("colmk"), true);
+//             break;
+//     }
+
+//     oled_write_P(PSTR("\n"), false);
+//     if (led_usb_state.caps_lock) {
+//         oled_write_ln_P(PSTR("CAPS "), true);
+//     } else {
+//         oled_write_ln_P(PSTR("caps "), false);
+//     }
+// }
 
 
 static void print_status_narrow_master(void) {
@@ -317,7 +331,7 @@ bool oled_task_user(void) {
     led_usb_state = host_keyboard_led_state();
 
     if (is_keyboard_master()) {
-        if (timer_elapsed32(oled_timer) > 60000) { // 60 seconds?
+        if (timer_elapsed32(oled_timer) > 30000) { // 60 seconds?
             oled_off(); // Turn of OLED
             return false; // prevent further rendering
         } else {
@@ -327,7 +341,7 @@ bool oled_task_user(void) {
         print_status_narrow_master();
         render_luna(0, 13); // doggo
     } else {
-        print_status_narrow_slave();
+        // print_status_narrow_slave();
         oled_render_logo();
     }
     return false;
